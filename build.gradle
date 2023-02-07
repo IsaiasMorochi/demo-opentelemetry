@@ -1,0 +1,52 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.2'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'de.undercouch.download' version '4.1.1'
+}
+
+group = 'com.imorochi'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		// Add snapshot repository
+		url "https://oss.sonatype.org/content/repositories/snapshots"
+	}
+}
+
+compileJava {
+	sourceCompatibility = "17"
+	targetCompatibility = "17"
+}
+
+bootRun {
+	mainClass.set 'com.imorochi.demo.DemoApplication'
+}
+
+bootJar {
+	dependsOn("downloadAgent")
+}
+
+dependencies {
+	implementation 'io.opentelemetry:opentelemetry-api'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+task downloadAgent(type: Download) {
+	src "https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar"
+	dest project.buildDir.toString() + "/otel/opentelemetry-javaagent.jar"
+	overwrite true
+}
