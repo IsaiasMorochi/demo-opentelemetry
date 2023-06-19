@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim-buster
+FROM openjdk:17.0.2-jdk-slim-buster
 
 ADD build/libs/demo-*-SNAPSHOT.jar /app.jar
 ADD build/otel/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar
